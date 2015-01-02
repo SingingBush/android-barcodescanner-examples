@@ -1,8 +1,8 @@
 package com.singingbush.barcodescanner;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -37,8 +37,8 @@ public class MainActivity extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -60,11 +60,26 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null) {
-            Log.d(TAG, "scan result: " + scanResult);
-        } else {
-            Log.d(TAG, "scan result was NULL");
+        switch(requestCode) {
+            case IntentIntegrator.REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    // we could use:
+                    // IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+                    // but all it really does it get the results out of the bundle
+                    String barcode = intent.getStringExtra("SCAN_RESULT");
+                    String type = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                    Log.d(TAG, String.format("ZXing: barcode: '%s' type: %s", barcode, type));
+                    Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case ScanditActivity.REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    String barcode = intent.getStringExtra("SCAN_RESULT");
+                    String type = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                    Log.d(TAG, String.format("Scandit: barcode: '%s' type: %s", barcode, type));
+                    Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
@@ -84,6 +99,9 @@ public class MainActivity extends ActionBarActivity {
             Button scanButton = (Button)rootView.findViewById(R.id.scan_button);
             scanButton.setOnClickListener(this);
 
+            Button scanditButton = (Button)rootView.findViewById(R.id.scandit_button);
+            scanditButton.setOnClickListener(this);
+
             Button aboutButton = (Button)rootView.findViewById(R.id.about_button);
             aboutButton.setOnClickListener(this);
 
@@ -97,8 +115,12 @@ public class MainActivity extends ActionBarActivity {
         public void onClick(View view) {
             switch(view.getId()) {
                 case R.id.scan_button:
-                    Log.v(TAG, "scan barcode button clicked");
-                    scanBarcode();
+                    startZXing();
+                    break;
+                case R.id.scandit_button:
+                    // initiate Scandit barcode scanner
+                    Intent scanditIntent = new Intent(getActivity(), ScanditActivity.class);
+                    getActivity().startActivityForResult(scanditIntent, ScanditActivity.REQUEST_CODE);
                     break;
                 case R.id.about_button:
                     Log.v(TAG, "about button clicked");
@@ -112,7 +134,7 @@ public class MainActivity extends ActionBarActivity {
             }
         }
 
-        private void scanBarcode() {
+        private void startZXing() {
             IntentIntegrator integrator = new IntentIntegrator(getActivity());
             // possible barcode types are:
             // "UPC_A", "UPC_E", "EAN_8", "EAN_13", "CODE_39",
