@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import net.sourceforge.zbar.Symbol;
 
@@ -39,8 +38,8 @@ public class MainActivity extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
-
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -74,14 +73,14 @@ public class MainActivity extends Activity {
                     Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
                 }
                 break;
-//            case ScanditActivity.REQUEST_CODE:
-//                if (resultCode == Activity.RESULT_OK) {
-//                    String barcode = intent.getStringExtra("SCAN_RESULT");
-//                    String type = intent.getStringExtra("SCAN_RESULT_FORMAT");
-//                    Log.d(TAG, String.format("Scandit: barcode: '%s' type: %s", barcode, type));
-//                    Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
-//                }
-//                break;
+            case ScanditActivity.REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    String barcode = intent.getStringExtra("SCAN_RESULT");
+                    String type = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                    Log.d(TAG, String.format("Scandit: barcode: '%s' type: %s", barcode, type));
+                    Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
+                }
+                break;
             case ZBarScannerActivity.REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
                     String barcode = intent.getStringExtra("SCAN_RESULT");
@@ -108,11 +107,11 @@ public class MainActivity extends Activity {
             Button scanButton = (Button)rootView.findViewById(R.id.scan_button);
             scanButton.setOnClickListener(this);
 
-            //Button scanditButton = (Button)rootView.findViewById(R.id.scandit_button);
-            //scanditButton.setOnClickListener(this);
-
             Button scanZbarButton = (Button)rootView.findViewById(R.id.scan_button_zbar);
             scanZbarButton.setOnClickListener(this);
+
+            Button scanditButton = (Button)rootView.findViewById(R.id.scandit_button);
+            scanditButton.setOnClickListener(this);
 
             Button aboutButton = (Button)rootView.findViewById(R.id.about_button);
             aboutButton.setOnClickListener(this);
@@ -129,13 +128,12 @@ public class MainActivity extends Activity {
                 case R.id.scan_button:
                     startZXing();
                     break;
-//                case R.id.scandit_button:
-//                    // initiate Scandit barcode scanner
-//                    Intent scanditIntent = new Intent(getActivity(), ScanditActivity.class);
-//                    getActivity().startActivityForResult(scanditIntent, ScanditActivity.REQUEST_CODE);
                 case R.id.scan_button_zbar:
-                    Log.v(TAG, "zbar scan barcode button clicked");
                     scanWithZBar();
+                case R.id.scandit_button:
+                    // initiate Scandit barcode scanner
+                    Intent scanditIntent = new Intent(getActivity(), ScanditActivity.class);
+                    getActivity().startActivityForResult(scanditIntent, ScanditActivity.REQUEST_CODE);
                     break;
                 case R.id.about_button:
                     Log.v(TAG, "about button clicked");
@@ -161,8 +159,7 @@ public class MainActivity extends Activity {
             // possible barcode types are:
             // "UPC_A", "UPC_E", "EAN_8", "EAN_13", "CODE_39",
             // "CODE_93", "CODE_128", "ITF", "RSS_14", "RSS_EXPANDED"
-            Collection<String> BARCODE_TYPES =
-                    Collections.unmodifiableCollection(Arrays.asList("UPC_A", "UPC_E", "EAN_8", "EAN_13"));
+            Collection<String> BARCODE_TYPES = Collections.unmodifiableCollection(Arrays.asList("UPC_A", "UPC_E", "EAN_8", "EAN_13"));
             integrator.initiateScan(BARCODE_TYPES);
         }
 

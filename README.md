@@ -1,8 +1,11 @@
 Android Barcode Scanner
 =======================
 
-This project shows how to make use on the ZXing library to read barcodes on an Android device.
+This project shows how to make use of the [ZXing](https://github.com/zxing/zxing/) library [Zbar](http://zbar.sourceforge.net/), and the [Scandit SDK](http://scandit.com) to read bar codes on an Android device.
 
-It is recommended that you use Android Studio 0.4.2 or above when building the project.
+It is recommended that you use Android Studio 1.0.1 and Android Build Tools 21.1.2 or above when building the project.
 
-Note that a physical device is required to use the barcode scanner, the emulator is not sufficient.
+## Note the following ##
+- ZXing has been implemented by way of their _IntentIntegrator_ which prompts the user to install their Barcode Scanner app if it's not already on the phone (in a future update I will add an example of how to do this a better way)
+- a physical device is required to use the barcode scanner, the emulator is not sufficient.
+- an API Key is required to use the Scandit SDK - it needs to be placed in _ScanditActivity_

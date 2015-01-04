@@ -30,13 +30,14 @@
     <string name="productList_contextmenu_delete">delete</string>
 
     <string name="about_title">About This App</string>
-    <string name="about_text">Scan a product barcode for detailed information about the ingredients and nutritional value</string>
+    <string name="about_text">See the source on github to see how to implement barcode scanning using either ZXing, Zbar, or the Scandit SDK</string>
 
     <string name="scan_button_label">Scan Item (ZXing)</string>
     <string name="scandit_button_label">Scan Item (Scandit)</string>
     <string name="scan_button_zbar">Scan Item (Zbar)</string>
     <string name="about_button_label">About</string>
     <string name="exit_button_label">Exit</string>
+
     <string name="submit_button_label">Submit</string>
 
     <string name="options_menu_ScanBarcode">Scan Barcode</string>

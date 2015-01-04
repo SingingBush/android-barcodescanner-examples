@@ -20,7 +20,7 @@ android {
 
 dependencies {
     compile files('src/main/libs/zbar.jar')
-    //compile files('libs/scanditsdk-barcodepicker-android-4.3.0.jar')
+    compile files('libs/scanditsdk-barcodepicker-android-4.3.0.jar')
 
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.google.zxing:zxing-parent:3.1.0'
