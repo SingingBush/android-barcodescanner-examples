@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.mirasense.scanditsdk.ScanditSDKBarcodePicker;
-import com.mirasense.scanditsdk.interfaces.ScanditSDKListener;
+import com.mirasense.scanditsdk.ScanditSDKScanSettings;
+import com.mirasense.scanditsdk.interfaces.ScanditSDKCode;
+import com.mirasense.scanditsdk.interfaces.ScanditSDKOnScanListener;
+import com.mirasense.scanditsdk.interfaces.ScanditSDKScanSession;
+
+import static com.mirasense.scanditsdk.interfaces.ScanditSDK.Symbology;
 
 /**
  * @author samael
  */
-public class ScanditActivity extends Activity implements ScanditSDKListener {
+public class ScanditActivity extends Activity implements ScanditSDKOnScanListener {
 
     private static final String TAG = ScanditActivity.class.getSimpleName();
     private static final String API_KEY = "** API KEY HERE **";
@@ -25,9 +30,12 @@ public class ScanditActivity extends Activity implements ScanditSDKListener {
 
         Log.v(TAG, "starting " + TAG);
 
-        picker = new ScanditSDKBarcodePicker(this, API_KEY);
-        picker.setGS1DataBarExpandedEnabled(false); // disabling GS1
-        picker.getOverlayView().addListener(this);
+        ScanditSDKScanSettings settings = ScanditSDKScanSettings.getDefaultSettings();
+        final Symbology[] symbologies = new Symbology[] {Symbology.EAN13, Symbology.UPC12, Symbology.QR};
+        settings.enableSymbologies(symbologies);
+
+        picker = new ScanditSDKBarcodePicker(this, API_KEY, settings);
+        picker.addOnScanListener(this);
 
         // set options for the overlay
         //picker.getOverlayView().showSearchBar(true); // allows manual entry of barcodes, defaults to false
@@ -51,34 +59,18 @@ public class ScanditActivity extends Activity implements ScanditSDKListener {
     }
 
     @Override
-    public void didCancel() {
-        picker.stopScanning();
-        finish();
-    }
+    public void didScan(ScanditSDKScanSession session) {
+        session.stopScanning();
 
-    /**
-     *  Called when a barcode has been decoded successfully.
-     *
-     *  @param barcode Scanned barcode content.
-     *  @param symbology Scanned barcode symbology.
-     */
-    @Override
-    public void didScanBarcode(String barcode, String symbology) {
-        Log.v(TAG, String.format("Scandit didScanBarcode: '%s' '%s'", barcode, symbology));
-        picker.stopScanning();
+        for(final ScanditSDKCode code : session.getNewlyDecodedCodes()) {
+            Log.v(TAG, String.format("Scandit didScanBarcode: '%s' '%s'", code.getData(), code.getSymbologyString()));
 
-        Bundle conData = new Bundle();
-        conData.putString("SCAN_RESULT", barcode);
-        conData.putString("SCAN_RESULT_FORMAT", symbology);
-        Intent intent = new Intent();
-        intent.putExtras(conData);
-        setResult(RESULT_OK, intent);
-        
-        finish();
-    }
+            Intent result = new Intent();
+            result.putExtra("SCAN_RESULT", code.getData());
+            result.putExtra("SCAN_RESULT_FORMAT", code.getSymbologyString());
+            setResult(Activity.RESULT_OK, result);
 
-    @Override
-    public void didManualSearch(String s) {
-        // not using this
+            finish();
+        }
     }
 }
