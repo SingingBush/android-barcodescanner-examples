@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.singingbush.barcodescanner" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.Camera" android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -16,6 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--<activity android:name=".ScanditActivity"/>-->
+
+        <activity android:name=".ZBarScannerActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="landscape"/>
 
         <activity
             android:name=".AboutActivity"
