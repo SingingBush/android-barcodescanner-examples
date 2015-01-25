@@ -31,7 +31,7 @@ public class ScanditActivity extends Activity implements ScanditSDKOnScanListene
         Log.v(TAG, "starting " + TAG);
 
         ScanditSDKScanSettings settings = ScanditSDKScanSettings.getDefaultSettings();
-        final Symbology[] symbologies = new Symbology[] {Symbology.EAN13, Symbology.UPC12, Symbology.QR};
+        final Symbology[] symbologies = new Symbology[] {Symbology.EAN13, Symbology.UPCE, Symbology.UPC12, Symbology.QR};
         settings.enableSymbologies(symbologies);
 
         picker = new ScanditSDKBarcodePicker(this, API_KEY, settings);

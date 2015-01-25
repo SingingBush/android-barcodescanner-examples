@@ -21,6 +21,8 @@ public class ZBarScannerActivity extends Activity implements Camera.PreviewCallb
     private static final String TAG = ZBarScannerActivity.class.getSimpleName();
     public static final int REQUEST_CODE = 6528;
 
+    private static final String NATIVE_LIB = "iconv";
+
     public static final String SCAN_MODES = "SCAN_MODES";
     public static final String ERROR_INFO = "ERROR_INFO";
 
@@ -32,7 +34,7 @@ public class ZBarScannerActivity extends Activity implements Camera.PreviewCallb
     private boolean mPreviewing = true;
 
     static {
-        System.loadLibrary("iconv");
+        System.loadLibrary(NATIVE_LIB);
     }
 
     @Override

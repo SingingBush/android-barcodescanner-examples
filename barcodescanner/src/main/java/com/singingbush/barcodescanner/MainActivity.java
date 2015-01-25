@@ -130,6 +130,7 @@ public class MainActivity extends Activity {
                     break;
                 case R.id.scan_button_zbar:
                     scanWithZBar();
+                    break;
                 case R.id.scandit_button:
                     // initiate Scandit barcode scanner
                     Intent scanditIntent = new Intent(getActivity(), ScanditActivity.class);
