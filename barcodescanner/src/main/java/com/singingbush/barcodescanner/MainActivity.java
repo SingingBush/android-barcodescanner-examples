@@ -40,13 +40,13 @@ public class MainActivity extends Activity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+//    @Override // todo
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -67,29 +67,32 @@ public class MainActivity extends Activity {
                     // we could use:
                     // IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
                     // but all it really does it get the results out of the bundle
-                    String barcode = intent.getStringExtra("SCAN_RESULT");
-                    String type = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                    Log.d(TAG, String.format("ZXing: barcode: '%s' type: %s", barcode, type));
-                    Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
+                    showResultAsToast(intent, "ZXing");
                 }
                 break;
             case ScanditActivity.REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    String barcode = intent.getStringExtra("SCAN_RESULT");
-                    String type = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                    Log.d(TAG, String.format("Scandit: barcode: '%s' type: %s", barcode, type));
-                    Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
+                    showResultAsToast(intent, "Scandit");
                 }
                 break;
             case ZBarScannerActivity.REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    String barcode = intent.getStringExtra("SCAN_RESULT");
-                    String type = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                    Log.d(TAG, String.format("Zbar: barcode: '%s' type: %s", barcode, type));
-                    Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
+                    showResultAsToast(intent, "Zbar");
+                }
+                break;
+            case RedLaserActivity.REQUEST_CODE:
+                if(resultCode == Activity.RESULT_OK) {
+                    showResultAsToast(intent, "Red Laser");
                 }
                 break;
         }
+    }
+
+    private void showResultAsToast(final Intent result, final String provider) {
+        String barcode = result.getStringExtra("SCAN_RESULT");
+        String type = result.getStringExtra("SCAN_RESULT_FORMAT");
+        Log.d(TAG, String.format("Barcode: '%s' type: %s from %s", barcode, type, provider));
+        Toast.makeText(this, String.format("barcode: '%s' type: %s", barcode, type), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -113,6 +116,9 @@ public class MainActivity extends Activity {
             Button scanditButton = (Button)rootView.findViewById(R.id.scandit_button);
             scanditButton.setOnClickListener(this);
 
+            Button redLaserBtn = (Button)rootView.findViewById(R.id.redlaser_button);
+            redLaserBtn.setOnClickListener(this);
+
             Button aboutButton = (Button)rootView.findViewById(R.id.about_button);
             aboutButton.setOnClickListener(this);
 
@@ -135,6 +141,10 @@ public class MainActivity extends Activity {
                     // initiate Scandit barcode scanner
                     Intent scanditIntent = new Intent(getActivity(), ScanditActivity.class);
                     getActivity().startActivityForResult(scanditIntent, ScanditActivity.REQUEST_CODE);
+                    break;
+                case R.id.redlaser_button:
+                    Intent rlIntent = new Intent(getActivity(), RedLaserActivity.class);
+                    getActivity().startActivityForResult(rlIntent, RedLaserActivity.REQUEST_CODE);
                     break;
                 case R.id.about_button:
                     Log.v(TAG, "about button clicked");

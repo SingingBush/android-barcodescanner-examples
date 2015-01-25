@@ -36,6 +36,13 @@
             android:text="@string/scandit_button_label" />
 
         <Button
+            android:id="@+id/redlaser_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/scan_button_redlaser" />
+
+        <Button
             android:id="@+id/about_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

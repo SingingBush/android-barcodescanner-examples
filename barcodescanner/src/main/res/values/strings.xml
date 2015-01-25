@@ -35,6 +35,7 @@
     <string name="scan_button_label">Scan Item (ZXing)</string>
     <string name="scandit_button_label">Scan Item (Scandit)</string>
     <string name="scan_button_zbar">Scan Item (Zbar)</string>
+    <string name="scan_button_redlaser">Scan Item (Red Laser)</string>
     <string name="about_button_label">About</string>
     <string name="exit_button_label">Exit</string>
 
