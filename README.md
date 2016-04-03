@@ -1,6 +1,8 @@
 Android Barcode Scanner
 =======================
 
+[![Build Status](https://travis-ci.org/SingingBush/android-barcodescanner-examples.png)](https://travis-ci.org/SingingBush/android-barcodescanner-examples)
+
 This project shows how to add barcode scanning to your app via the following libraries:
 
 - [ZXing](https://github.com/zxing/zxing/) ([Apache License v2.0](http://www.apache.org/licenses/LICENSE-2.0.html))
